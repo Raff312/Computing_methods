@@ -14,7 +14,7 @@ namespace Lab1_Gauss_ {
                 };
 
                 if (data.GetLength(0) != data.GetLength(1) - 1) {
-                    throw new Exception("Matrix isn't square");
+                    throw new Exception("Matrix is not square");
                 }
 
                 var matrix = new Matrix(data);

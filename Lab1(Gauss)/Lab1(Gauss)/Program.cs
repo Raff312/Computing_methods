@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace Lab1_Gauss_ {
     internal class Program {
-        private static void Main(string[] args) {
+        private static void Main() {
             try {
                 var data = new double[,] {
                     {2, 3, -1, 7},

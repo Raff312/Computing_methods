@@ -31,7 +31,7 @@ namespace Lab1_Gauss_ {
         }
 
         public void SwapRows(int row1, int row2) {
-            if (row1 < 0 || row1 > ColsNum || row2 < 0 || row2 > ColsNum) {
+            if (row1 < 0 || row1 >= RowsNum || row2 < 0 || row2 >= RowsNum) {
                 throw new ArgumentOutOfRangeException();
             }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Lab1_Gauss_ {
+namespace Lab1_Gauss {
     public class Matrix {
         private readonly double[,] _data;
 
@@ -20,7 +20,7 @@ namespace Lab1_Gauss_ {
 
         public Matrix(double[,] data) {
             var rows = data.GetLength(0);
-            var cols= data.GetLength(1);
+            var cols = data.GetLength(1);
 
             _data = new double[rows, cols];
             for (var i = 0; i < rows; i++) {
@@ -28,6 +28,10 @@ namespace Lab1_Gauss_ {
                     _data[i, j] = data[i, j];
                 }
             }
+        }
+
+        public Matrix Copy() {
+            return new Matrix(_data.Clone() as double[,]);
         }
 
         public void SwapRows(int row1, int row2) {
@@ -52,7 +56,9 @@ namespace Lab1_Gauss_ {
                     result += value + "\t";
                 }
 
-                result += "\n";
+                if (i != RowsNum - 1) {
+                    result += "\n";
+                }
             }
 
             return result;

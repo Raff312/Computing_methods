@@ -51,7 +51,7 @@ namespace Lab1_Gauss {
             var data = new double[dim, dim + 1];
             for (var i = 0; i < dim; i++) {
                 for (var j = 0; j < dim; j++) {
-                    data[i, j] = Utils.GetValueFromUser<double>($"Enter X{i}{j}: ");
+                    data[i, j] = Utils.GetValueFromUser<double>($"Enter A{i}{j}: ");
                 }
 
                 data[i, dim] = Utils.GetValueFromUser<double>($"Enter F{i}: ");

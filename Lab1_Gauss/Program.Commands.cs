@@ -126,14 +126,14 @@ namespace Lab1_Gauss {
         private static IList<double> GetRoots(Matrix matrix) {
             var result = new List<double>();
             for (var i = matrix.RowsNum - 1; i >= 0; i--) {
+                if (Math.Abs(matrix[i, i]) < 1.0E-20) {
+                    return null;
+                }
+                
                 var value = matrix[i, matrix.ColsNum - 1];
                 var k = 0;
                 for (var j = i + 1; j < matrix.ColsNum - 1; j++) {
                     value -= matrix[i, j] * (result.Count > k ? result[k++] : 1);
-                }
-
-                if (Math.Abs(matrix[i, i]) < 1.0E-20) {
-                    return null;
                 }
 
                 result.Insert(0, value / matrix[i, i]);
@@ -144,7 +144,7 @@ namespace Lab1_Gauss {
 
         private static void ShowResult(IList<double> list, bool format = false) {
             for (var i = 0; i < list.Count; i++) {
-                var value = format ? list[i].ToString("0.##") : list[i].ToString(CultureInfo.CurrentCulture);
+                var value = format ? list[i].ToString("0.####") : list[i].ToString(CultureInfo.CurrentCulture);
                 Console.WriteLine($"x{i + 1} = {value}");
             }
         }

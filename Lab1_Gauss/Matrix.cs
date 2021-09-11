@@ -52,7 +52,7 @@ namespace Lab1_Gauss {
             var result = "";
             for (var i = 0; i < RowsNum; i++) {
                 for (var j = 0; j < ColsNum; j++) {
-                    var value = format ? _data[i, j].ToString("0.##") : _data[i, j].ToString(CultureInfo.CurrentCulture);
+                    var value = format ? _data[i, j].ToString("0.####") : _data[i, j].ToString(CultureInfo.CurrentCulture);
                     result += value + "\t";
                 }
 

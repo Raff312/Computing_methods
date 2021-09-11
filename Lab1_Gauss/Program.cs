@@ -27,13 +27,13 @@ namespace Lab1_Gauss {
                     }
 
                     Console.WriteLine($"Executing command '{command}'...\n");
-					commandDefinition.Action();
+                    commandDefinition.Action();
                     ConsoleTools.WriteLine(ConsoleColor.Green, $"\nCommand '{command}' completed.");
                 } else {
-                    ConsoleTools.WriteLine(ConsoleColor.Yellow, $"Unknown command '{command}'");
+                    ConsoleTools.WriteLine(ConsoleColor.Yellow, $"\nUnknown command '{command}'");
                 }
             } catch (Exception e) {
-                ConsoleTools.WriteLine(ConsoleColor.Red, $"Exception during command '{command}': {e.Message}");
+                ConsoleTools.WriteLine(ConsoleColor.Red, $"\nException during command '{command}': {e.Message}");
             }
 
             return true;

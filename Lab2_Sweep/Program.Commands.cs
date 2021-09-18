@@ -48,23 +48,23 @@ namespace Lab2_Sweep {
 
         private static void Init() {
             // just for test
-            var data = new double[5, 6] {
-                {2, -1, 0, 0, 0, -25},
-                {-3, 8, -1, 0, 0, 72},
-                {0, -5, 12, 2, 0, -69},
-                {0, 0, -6, 18, -4, -156}, 
-                {0, 0, 0, -5, 10, 20}
-            };
+            // var data = new double[5, 6] {
+            //     {2, -1, 0, 0, 0, -25},
+            //     {-3, 8, -1, 0, 0, 72},
+            //     {0, -5, 12, 2, 0, -69},
+            //     {0, 0, -6, 18, -4, -156}, 
+            //     {0, 0, 0, -5, 10, 20}
+            // };
 
-            // var dim = Utils.GetValueFromUser<int>("Enter dimension: ");
-            // var data = new double[dim, dim + 1];
-            // for (var i = 0; i < dim; i++) {
-            //     for (var j = 0; j < dim; j++) {
-            //         data[i, j] = Utils.GetValueFromUser<double>($"Enter A{i}{j}: ");
-            //     }
+            var dim = Utils.GetValueFromUser<int>("Enter dimension: ");
+            var data = new double[dim, dim + 1];
+            for (var i = 0; i < dim; i++) {
+                for (var j = 0; j < dim; j++) {
+                    data[i, j] = Utils.GetValueFromUser<double>($"Enter A{i}{j}: ");
+                }
 
-            //     data[i, dim] = Utils.GetValueFromUser<double>($"Enter F{i}: ");
-            // }
+                data[i, dim] = Utils.GetValueFromUser<double>($"Enter F{i}: ");
+            }
 
             _matrix = new Matrix(data);
         }

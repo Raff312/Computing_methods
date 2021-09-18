@@ -47,6 +47,15 @@ namespace Lab2_Sweep {
         }
 
         private static void Init() {
+            // just for test
+            var data = new double[5, 6] {
+                {2, -1, 0, 0, 0, -25},
+                {-3, 8, -1, 0, 0, 72},
+                {0, -5, 12, 2, 0, -69},
+                {0, 0, -6, 18, -4, -156}, 
+                {0, 0, 0, -5, 10, 20}
+            };
+
             // var dim = Utils.GetValueFromUser<int>("Enter dimension: ");
             // var data = new double[dim, dim + 1];
             // for (var i = 0; i < dim; i++) {
@@ -56,14 +65,6 @@ namespace Lab2_Sweep {
 
             //     data[i, dim] = Utils.GetValueFromUser<double>($"Enter F{i}: ");
             // }
-            
-            var data = new double[5, 6] {
-                {2, -1, 0, 0, 0, -25},
-                {-3, 8, -1, 0, 0, 72},
-                {0, -5, 12, 2, 0, -69},
-                {0, 0, -6, 18, -4, -156}, 
-                {0, 0, 0, -5, 10, 20}
-            };
 
             _matrix = new Matrix(data);
         }
@@ -93,8 +94,7 @@ namespace Lab2_Sweep {
             ps[0] = -ci / bi;
             qs[0] = di / bi;
 
-            var i = 0;
-            for (i = 1; i < _matrix.RowsNum; i++) {
+            for (var i = 1; i < _matrix.RowsNum; i++) {
                 ai = _matrix[i, i - 1];
                 bi = _matrix[i, i];
                 ci = _matrix[i, i + 1];
@@ -111,9 +111,9 @@ namespace Lab2_Sweep {
             Utils.ShowArr(qs);
 
             _roots = new double[_matrix.RowsNum];
-            _roots[_matrix.RowsNum - 1] = (di - ai * qs[i - 1]) / (ai * ps[i - 1] + bi);
-            for (i = _matrix.RowsNum - 1; i > 0; i--) {
-               _roots[i - 1] = ps[i] * _roots[i] + qs[i]; 
+            _roots[_matrix.RowsNum - 1] = qs[qs.Length - 1];
+            for (var i = _matrix.RowsNum - 2; i >= 0; i--) {
+               _roots[i] = ps[i] * _roots[i + 1] + qs[i]; 
             }
 
             Console.WriteLine("\n\nResult: ");

@@ -48,12 +48,18 @@ namespace Lab3_Seidel {
 
         private static void Init() {
             // just for test
-            var data = new double[5, 6] {
-                {2, -1, 0, 0, 0, -25},
-                {-3, 8, -1, 0, 0, 72},
-                {0, -5, 12, 2, 0, -69},
-                {0, 0, -6, 18, -4, -156},
-                {0, 0, 0, -5, 10, 20}
+            // var data = new double[5, 6] {
+            //     {2, -1, 0, 0, 0, -25},
+            //     {-3, 8, -1, 0, 0, 72},
+            //     {0, -5, 12, 2, 0, -69},
+            //     {0, 0, -6, 18, -4, -156},
+            //     {0, 0, 0, -5, 10, 20}
+            // };
+
+            var data = new double[3, 4] {
+                {1.02, -0.05, -0.10, 0.795},
+                {-0.11, 1.03, -0.05, 0.849},
+                {-0.11, -0.12, 1.04, 1.398}
             };
 
             // var dim = Utils.GetValueFromUser<int>("Enter dimension: ");
@@ -83,7 +89,45 @@ namespace Lab3_Seidel {
                 throw new Exception("There is no system!");
             }
 
+            var bMatrix = new double[_matrix.RowsNum, _matrix.ColsNum];
+            for (var i = 0; i < _matrix.RowsNum; i++) {
+                for (var j = 0; j < _matrix.ColsNum - 1; j++) {
+                    if (i != j) {
+                        bMatrix[i, j] = -_matrix[i, j] / _matrix[i, i];
+                    } else {
+                        bMatrix[i, j] = 0.0;
+                    }
+                }
+                bMatrix[i, _matrix.ColsNum - 1] = _matrix[i, _matrix.ColsNum - 1] / _matrix[i, i];
+            }
 
+            var oldRoots = new List<double>();
+            for (var i = 0; i < _matrix.RowsNum; i++) {
+                oldRoots.Add(_matrix[i, _matrix.ColsNum - 1]);
+            }
+
+            _roots = new double[_matrix.RowsNum];
+            for (var i = 0; i < _matrix.RowsNum; i++) {
+                var sum = 0.0;
+                for (var j = 0; j < _matrix.ColsNum - 1; j++) {
+                    sum += bMatrix[i, j] * oldRoots[j];
+                }
+                sum += bMatrix[i, _matrix.ColsNum - 1];
+
+                _roots[i] = sum;
+            }
+
+            for (var i = 0; i < _matrix.RowsNum; i++) {
+                oldRoots[i] = _roots[i];
+            }
+
+            Console.WriteLine("\n\nResult: ");
+            Utils.ShowArr(_roots);
+        }
+
+        private static bool Coverage(List<double> xk, List<double> xkp, double bNorm, double eps) {
+            var sum = xk.Select((t, i) => Math.Pow(t - xkp[i], 2)).Sum();
+            return bNorm / (1 - bNorm) * Math.Sqrt(sum) <= eps;
         }
 
         private static void ShowResult(IList<double> list, bool format = false) {

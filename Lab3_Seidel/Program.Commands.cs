@@ -6,7 +6,7 @@ using System.Linq;
 namespace Lab3_Seidel {
     partial class Program {
         private static Matrix _matrix;
-        private static double[] _roots;
+        private static List<double> _roots;
 
         private class CommandDefinition {
             public string[] Codes { get; }
@@ -89,7 +89,7 @@ namespace Lab3_Seidel {
                 throw new Exception("There is no system!");
             }
 
-            var bMatrix = new double[_matrix.RowsNum, _matrix.ColsNum];
+            var bMatrix = new Matrix(_matrix.RowsNum, _matrix.ColsNum);
             for (var i = 0; i < _matrix.RowsNum; i++) {
                 for (var j = 0; j < _matrix.ColsNum - 1; j++) {
                     if (i != j) {
@@ -102,32 +102,38 @@ namespace Lab3_Seidel {
             }
 
             var oldRoots = new List<double>();
+            _roots = new List<double>(_matrix.RowsNum);
             for (var i = 0; i < _matrix.RowsNum; i++) {
                 oldRoots.Add(_matrix[i, _matrix.ColsNum - 1]);
+                _roots.Add(_matrix[i, _matrix.ColsNum - 1]);
             }
 
-            _roots = new double[_matrix.RowsNum];
-            for (var i = 0; i < _matrix.RowsNum; i++) {
-                var sum = 0.0;
-                for (var j = 0; j < _matrix.ColsNum - 1; j++) {
-                    sum += bMatrix[i, j] * oldRoots[j];
+            do {
+                for (var i = 0; i < _matrix.RowsNum; i++) {
+                    oldRoots[i] = _roots[i];
                 }
-                sum += bMatrix[i, _matrix.ColsNum - 1];
 
-                _roots[i] = sum;
-            }
+                for (var i = 0; i < _matrix.RowsNum; i++) {
+                    var sum = 0.0;
+                    for (var j = 0; j < i; j++) {
+                        sum += bMatrix[i, j] * _roots[j];
+                    }
+                    for (var j = i; j < _matrix.ColsNum - 1; j++) {
+                        sum += bMatrix[i, j] * oldRoots[j];
+                    }
+                    sum += bMatrix[i, _matrix.ColsNum - 1];
 
-            for (var i = 0; i < _matrix.RowsNum; i++) {
-                oldRoots[i] = _roots[i];
-            }
+                    _roots[i] = sum;
+                }
+            } while (!IsConverge(_roots, oldRoots, 0, 0.001));
 
             Console.WriteLine("\n\nResult: ");
             Utils.ShowArr(_roots);
         }
 
-        private static bool Coverage(List<double> xk, List<double> xkp, double bNorm, double eps) {
+        private static bool IsConverge(List<double> xk, List<double> xkp, double bNorm, double eps) {
             var sum = xk.Select((t, i) => Math.Pow(t - xkp[i], 2)).Sum();
-            return bNorm / (1 - bNorm) * Math.Sqrt(sum) <= eps;
+            return Math.Sqrt(sum) <= eps;
         }
 
         private static void ShowResult(IList<double> list, bool format = false) {
@@ -142,8 +148,8 @@ namespace Lab3_Seidel {
                 throw new Exception("Matix or roots are not defined");
             }
 
-            if (_matrix.RowsNum != _roots.Length) {
-                throw new Exception($"Inconsistency between matrix dim({_matrix.RowsNum}) and roots dim({_roots.Length})");
+            if (_matrix.RowsNum != _roots.Count) {
+                throw new Exception($"Inconsistency between matrix dim({_matrix.RowsNum}) and roots dim({_roots.Count})");
             }
 
             for (var i = 0; i < _matrix.RowsNum; i++) {

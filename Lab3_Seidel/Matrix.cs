@@ -15,7 +15,6 @@ namespace Lab3_Seidel {
 
         public Matrix(int n, int m) {
             _data = new double[n, m];
-            Fill(0);
         }
 
         public Matrix(double[,] data) {
@@ -62,14 +61,6 @@ namespace Lab3_Seidel {
             }
 
             return result;
-        }
-
-        private void Fill(double x) {
-            for (var i = 0; i < RowsNum; i++) {
-                for (var j = 0; j < ColsNum; j++) {
-                    _data[i, j] = x;
-                }
-            }
         }
     }
 }

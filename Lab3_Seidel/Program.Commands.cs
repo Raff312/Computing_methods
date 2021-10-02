@@ -56,16 +56,10 @@ namespace Lab3_Seidel {
             //     {0, 0, 0, -5, 10, 20}
             // };
 
-            // var data = new double[3, 4] {
-            //     {1.02, -0.05, -0.10, 0.795},
-            //     {-0.11, 1.03, -0.05, 0.849},
-            //     {-0.11, -0.12, 1.04, 1.398}
-            // };
-            
             var data = new double[3, 4] {
-                {10, 1, 1, 12},
-                {2, 10, 1, 13},
-                {2, 2, 10, 14}
+                {1.02, -0.05, -0.10, 0.795},
+                {-0.11, 1.03, -0.05, 0.849},
+                {-0.11, -0.12, 1.04, 1.398}
             };
 
             // var dim = Utils.GetValueFromUser<int>("Enter dimension: ");
@@ -110,6 +104,9 @@ namespace Lab3_Seidel {
             }
 
             var bNorm = bMatrix.GetNorm();
+            if (bNorm >= 1) {
+                throw new Exception("B matrix norm >= 1");
+            }
 
             _roots = new List<double>(_matrix.RowsNum);
             for (var i = 0; i < _matrix.RowsNum; i++) {

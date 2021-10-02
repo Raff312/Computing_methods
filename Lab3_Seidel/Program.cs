@@ -33,7 +33,7 @@ namespace Lab3_Seidel {
                     ConsoleTools.WriteLine(ConsoleColor.Yellow, $"\nUnknown command '{command}'");
                 }
             } catch (Exception e) {
-                ConsoleTools.WriteLine(ConsoleColor.Red, $"\nException during command '{command}': {e}");
+                ConsoleTools.WriteLine(ConsoleColor.Red, $"\nException during command '{command}': {e.Message}");
             }
 
             return true;

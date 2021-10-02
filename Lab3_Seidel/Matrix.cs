@@ -50,7 +50,7 @@ namespace Lab3_Seidel {
         public double GetNorm() {
             var max = 0.0;
             for (var i = 0; i < RowsNum; i++) {
-                max += this[0, i];
+                max += Math.Abs(this[0, i]);
             }
 
             for (var i = 1; i < RowsNum; i++) {

@@ -47,6 +47,26 @@ namespace Lab3_Seidel {
             }
         }
 
+        public double GetNorm() {
+            var max = 0.0;
+            for (var i = 0; i < RowsNum; i++) {
+                max += this[0, i];
+            }
+
+            for (var i = 1; i < RowsNum; i++) {
+                var sum = 0.0;
+                for (var j = 0; j < RowsNum; j++) {
+                    sum += Math.Abs(this[i, j]);
+                }
+
+                if (sum > max) {
+                    max = sum;
+                }
+            }
+
+            return max;
+        }
+
         public string ToString(bool format = false) {
             var result = "";
             for (var i = 0; i < RowsNum; i++) {

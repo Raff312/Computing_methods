@@ -56,10 +56,16 @@ namespace Lab3_Seidel {
             //     {0, 0, 0, -5, 10, 20}
             // };
 
+            // var data = new double[3, 4] {
+            //     {1.02, -0.05, -0.10, 0.795},
+            //     {-0.11, 1.03, -0.05, 0.849},
+            //     {-0.11, -0.12, 1.04, 1.398}
+            // };
+            
             var data = new double[3, 4] {
-                {1.02, -0.05, -0.10, 0.795},
-                {-0.11, 1.03, -0.05, 0.849},
-                {-0.11, -0.12, 1.04, 1.398}
+                {10, 1, 1, 12},
+                {2, 10, 1, 13},
+                {2, 2, 10, 14}
             };
 
             // var dim = Utils.GetValueFromUser<int>("Enter dimension: ");
@@ -89,6 +95,8 @@ namespace Lab3_Seidel {
                 throw new Exception("There is no system!");
             }
 
+            var eps = Utils.GetValueFromUser<double>("Enter an epsilon: ");
+
             var bMatrix = new Matrix(_matrix.RowsNum, _matrix.ColsNum);
             for (var i = 0; i < _matrix.RowsNum; i++) {
                 for (var j = 0; j < _matrix.ColsNum - 1; j++) {
@@ -101,14 +109,18 @@ namespace Lab3_Seidel {
                 bMatrix[i, _matrix.ColsNum - 1] = _matrix[i, _matrix.ColsNum - 1] / _matrix[i, i];
             }
 
-            var oldRoots = new List<double>();
+            var bNorm = bMatrix.GetNorm();
+
             _roots = new List<double>(_matrix.RowsNum);
             for (var i = 0; i < _matrix.RowsNum; i++) {
-                oldRoots.Add(_matrix[i, _matrix.ColsNum - 1]);
                 _roots.Add(_matrix[i, _matrix.ColsNum - 1]);
             }
 
+            var countOfIterations = 0;
+            var oldRoots = new List<double>(new double[_roots.Count]);
             do {
+                countOfIterations++;
+                
                 for (var i = 0; i < _matrix.RowsNum; i++) {
                     oldRoots[i] = _roots[i];
                 }
@@ -125,15 +137,16 @@ namespace Lab3_Seidel {
 
                     _roots[i] = sum;
                 }
-            } while (!IsConverge(_roots, oldRoots, 0, 0.001));
+            } while (!IsConverge(_roots, oldRoots, bNorm, eps));
 
             Console.WriteLine("\n\nResult: ");
             Utils.ShowArr(_roots);
+            Console.WriteLine($"\nCountOfIterations: {countOfIterations}");
         }
 
         private static bool IsConverge(List<double> xk, List<double> xkp, double bNorm, double eps) {
             var sum = xk.Select((t, i) => Math.Pow(t - xkp[i], 2)).Sum();
-            return Math.Sqrt(sum) <= eps;
+            return bNorm / (1 - bNorm) * Math.Sqrt(sum) <= eps;
         }
 
         private static void ShowResult(IList<double> list, bool format = false) {

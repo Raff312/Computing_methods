@@ -49,21 +49,27 @@ namespace Lab5_Division {
             var eps = Utils.GetValueFromUser<double>("Enter an epsilon: ");
             var countOfIterations = 1;
 
-            // var x0 = a;
-            // var x1 = x0 - Fx(x0) / Dfx(x0);
-            // while (!IsConverage(x0, x1, eps)) {
-            //     x0 = x1;
-            //     x1 = x0 - Fx(x0) / Dfx(x0);
-            //     countOfIterations++;
-            // }
+            if (Math.Abs(Fx(a)) < eps) {
+                _root = a;
+            } else if (Math.Abs(Fx(b)) < eps) {
+                _root = b;
+            } else {
+                var c = a;
+                while (b - a > eps) {
+                    var dx = (b - a) / 2;
+                    c = a + dx;
+                    if (Math.Sign(Fx(a)) != Math.Sign(Fx(c))) {
+                        b = c;
+                    } else {
+                        a = c;
+                    }
+                }
 
-            // _root = x1;
+                _root = c;
+            }
+
             Console.WriteLine($"\n\nResult: x = {_root.ToString("0.####")}");
             Console.WriteLine($"\nCountOfIterations: {countOfIterations}");
-        }
-
-        private static bool IsConverage(double x1, double x2, double eps) {
-            return Math.Abs(x1 - x2) < eps;
         }
 
         private static void Check() {

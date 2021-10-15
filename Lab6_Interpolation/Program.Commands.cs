@@ -31,15 +31,15 @@ namespace Lab6_Interpolation {
         }
 
         private static void Run() {
-            var a = Utils.GetValueFromUser<double>("Enter a: ");
-            var b = Utils.GetValueFromUser<double>("Enter b: ");
+            var xList = new List<double> { 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2 };
+            var fList = new List<double> { 2.7182, 3.0041, 3.3201, 3.6692, 4.0552, 4.4816, 4.9530, 5.4739, 6.0496, 6.6858, 7.3890 };
 
-            var xList = new List<double> { -1.5, -0.75, 0, 0.75 };
-            var fList = new List<double> { -14.1014, -0.931596, 0, 0.931596 };
+            var lagrangeResult = Lagrange(xList, fList, 1.43);
+            Console.WriteLine($"\n\nLagrange result = {lagrangeResult}");
 
-            var result = Lagrange(xList, fList, 1.5);
-
-            Console.WriteLine($"\n\nResult = {result}");
+            var eps = Utils.GetValueFromUser<double>("Enter eps: ");
+            var aitkenResult = Aitken(xList, fList, 1.43, eps);
+            Console.WriteLine($"\nAitken result = {aitkenResult}");
         }
 
         private static double Lagrange(List<double> xList, List<double> fList, double x) {
@@ -66,6 +66,29 @@ namespace Lab6_Interpolation {
                 result *= (xList[k] - xList[i]);
             }
             return result;
+        }
+
+        private static double Aitken(List<double> xList, List<double> fList, double x, double eps) {
+            var k = fList.Count;
+            var i = 0;
+            var step = 1;
+            while (k > 1) {
+                var value = (fList[i] * (xList[i + step] - x) - fList[i + 1] * (xList[i] - x)) / (xList[i + step] - xList[i]);
+                
+                if (k != fList.Count && Math.Abs(fList[i] - value) < eps) {
+                    return value;
+                }
+
+                fList[i++] = value;
+
+                if (i >= k - 1) {
+                    i = 0;
+                    k--;
+                    step++;
+                }
+            }
+
+            return fList[0];
         }
     }
 }

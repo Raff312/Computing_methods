@@ -32,7 +32,7 @@ namespace Lab7_QuadratureFormulas {
             var to = Utils.GetValueFromUser<double>("Enter to: ");
             var eps = Utils.GetValueFromUser<double>("Enter eps: ");
 
-            var countOfIterations = 0;
+            var countOfIterations = 1;
             var n = 1;
 
             var prevRes = MediumRectangle(from, to, n);
@@ -47,7 +47,7 @@ namespace Lab7_QuadratureFormulas {
             Console.WriteLine($"\n\nResult for MediumRectangle = {curRes}");
             Console.WriteLine($"Count of iterations = {countOfIterations}");
 
-            countOfIterations = 0;
+            countOfIterations = 1;
             n = 1;
 
             prevRes = Parabola(from, to, n);
@@ -102,7 +102,7 @@ namespace Lab7_QuadratureFormulas {
         }
 
         private static double Fx(double x) {
-            return Math.Exp(x) * Math.Sin(1 / Math.Pow(x, 3));
+            return (Math.Exp(x) / Math.Pow(x, 2)) * Math.Sin(1 / Math.Pow(x, 3));
         }
     }
 }

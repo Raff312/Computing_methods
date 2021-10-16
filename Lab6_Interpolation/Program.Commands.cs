@@ -31,7 +31,7 @@ namespace Lab6_Interpolation {
         }
 
         private static void Run() {
-            var xList = new List<double> { 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2 };
+            var xList = new List<double> { 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0 };
             var fList = new List<double> { 2.7182, 3.0041, 3.3201, 3.6692, 4.0552, 4.4816, 4.9530, 5.4739, 6.0496, 6.6858, 7.3890 };
 
             var lagrangeResult = Lagrange(xList, fList, 1.43);
@@ -40,6 +40,9 @@ namespace Lab6_Interpolation {
             var eps = Utils.GetValueFromUser<double>("Enter eps: ");
             var aitkenResult = Aitken(xList, fList, 1.43, eps);
             Console.WriteLine($"\nAitken result = {aitkenResult}");
+
+            var correctResult = Math.Exp(1.43);
+            Console.WriteLine($"\nCorrect result = {correctResult}");
         }
 
         private static double Lagrange(List<double> xList, List<double> fList, double x) {
@@ -72,11 +75,21 @@ namespace Lab6_Interpolation {
             var k = fList.Count;
             var i = 0;
             var step = 1;
+
+            var minEps = double.MaxValue;
+            var valueWithMinEps = double.MaxValue;
+
             while (k > 1) {
                 var value = (fList[i] * (xList[i + step] - x) - fList[i + 1] * (xList[i] - x)) / (xList[i + step] - xList[i]);
                 
-                if (k != fList.Count && Math.Abs(fList[i] - value) < eps) {
+                var currentEps = Math.Abs(fList[i] - value);
+                if (k != fList.Count && currentEps < eps) {
                     return value;
+                }
+
+                if (currentEps < minEps) {
+                    minEps = currentEps;
+                    valueWithMinEps = value;
                 }
 
                 fList[i++] = value;
@@ -88,7 +101,7 @@ namespace Lab6_Interpolation {
                 }
             }
 
-            return fList[0];
+            return valueWithMinEps != double.MaxValue ? valueWithMinEps : fList[0];
         }
     }
 }

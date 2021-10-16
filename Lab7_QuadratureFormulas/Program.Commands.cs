@@ -28,11 +28,39 @@ namespace Lab7_QuadratureFormulas {
         }
 
         private static void Run() {
-            var resForMediumRectangle = MediumRectangle(1, 3, 100);
-            Console.WriteLine($"\n\nResult for MediumRectangle = {resForMediumRectangle}");
+            var from = Utils.GetValueFromUser<double>("Enter from: ");
+            var to = Utils.GetValueFromUser<double>("Enter to: ");
+            var eps = Utils.GetValueFromUser<double>("Enter eps: ");
 
-            var resForParabola = Parabola(1, 3, 100);
-            Console.WriteLine($"\n\nResult for Parabola = {resForParabola}");
+            var countOfIterations = 0;
+            var n = 1;
+
+            var prevRes = MediumRectangle(from, to, n);
+            var curRes = MediumRectangle(from, to, 2 * n);
+            while ((1.0 / 3 * Math.Abs(prevRes - curRes)) > eps) {
+                n *= 2;
+                prevRes = curRes;
+                curRes = MediumRectangle(from, to, 2 * n);
+                countOfIterations++;
+            }
+
+            Console.WriteLine($"\n\nResult for MediumRectangle = {curRes}");
+            Console.WriteLine($"Count of iterations = {countOfIterations}");
+
+            countOfIterations = 0;
+            n = 1;
+
+            prevRes = Parabola(from, to, n);
+            curRes = Parabola(from, to, 2 * n);
+            while ((1.0 / 15 * Math.Abs(prevRes - curRes)) > eps) {
+                n *= 2;
+                prevRes = curRes;
+                curRes = Parabola(from, to, 2 * n);
+                countOfIterations++;
+            }
+
+            Console.WriteLine($"\nResult for Parabola = {curRes}");
+            Console.WriteLine($"Count of iterations = {countOfIterations}");
         }
 
         private static double MediumRectangle(double a, double b, int n) {

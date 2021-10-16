@@ -11,5 +11,15 @@ namespace Lab7_QuadratureFormulas {
                 }
             }
         }
+
+        public static void Swap<T>(ref T lhs, ref T rhs) {
+            T temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+
+        public static bool IsEven(int n) {
+            return (n & 1) == 0;
+        }
     }
 }

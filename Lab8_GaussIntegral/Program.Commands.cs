@@ -62,18 +62,21 @@ namespace Lab8_GaussIntegral {
         }
 
         private static void Run() {
-            var n = Utils.GetValueFromUser<int>("Enter n(1-8): ");
-            if (n < 1 || n > 8) {
-                throw new Exception("Incorrect n");
+            var a = Utils.GetValueFromUser<double>("Enter from: ");
+            var b = Utils.GetValueFromUser<double>("Enter to: ");
+            var eps = Utils.GetValueFromUser<double>("Enter eps: ");
+
+            var n = 1;
+            var integralRes1 = ComputeIntegral(n++, a, b);
+            var integralRes2 = integralRes1 + 1;
+            while (Math.Abs(integralRes1 - integralRes2) > eps && n < 8) {
+                integralRes2 = integralRes1;
+                integralRes1 = ComputeIntegral(n++, a, b);
             }
+            Console.WriteLine($"Result = {integralRes1}");
+            Console.WriteLine($"Count of iterations = {n}");
 
-            var a = Utils.GetValueFromUser<double>("Enter a: ");
-            var b = Utils.GetValueFromUser<double>("Enter b: ");
-
-            var integralRes = ComputeIntegral(n, a, b);
-            Console.WriteLine($"Result = {integralRes}");
-
-            _results[n - 1] = integralRes;
+            _results[n - 1] = integralRes1;
         }
 
         private static double ComputeIntegral(int n, double a, double b) {
@@ -87,9 +90,9 @@ namespace Lab8_GaussIntegral {
             var sum = 0.0;
             var nSum = Sum(n - 1);
             for (var i = 0; i < n; i++) {
-                var ti = _tiList[nSum + i - 1];
+                var ti = _tiList[nSum + i];
                 var xi = (abSum + ti * abDist) / 2;
-                var wi = _wiList[nSum + i - 1];
+                var wi = _wiList[nSum + i];
                 sum += wi * Fx(xi);
             }
 

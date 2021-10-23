@@ -72,8 +72,7 @@ namespace Lab9_MonteCarlo {
         }
 
         private static double Fx(double x, double y, double z) {
-            // return x * Math.Pow(y, 2);
-            return x * Math.Exp(y);
+            return Math.Pow(x, 2) * Math.Cos(1 / Math.Pow(x, 3));
         }
     }
 }

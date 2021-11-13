@@ -28,52 +28,65 @@ namespace Lab10_Eiler {
         }
 
         private static void Run() {
-            var integralRes1 = ComputeIntegral(10000);
-            Console.WriteLine($"Result (N = 10000) = {integralRes1}");
-            
-            var integralRes2 = ComputeIntegral(1000000);
-            Console.WriteLine($"Result (N = 1000000) = {integralRes2}");
-            
-            var integralRes3 = ComputeIntegral(100000000);
-            Console.WriteLine($"Result (N = 100000000) = {integralRes3}");
+            var y0 = Utils.GetValueFromUser<double>("Enter y0: ");
+            var a = Utils.GetValueFromUser<double>("Enter a: ");
+            var b = Utils.GetValueFromUser<double>("Enter b: ");
+            var h = Utils.GetValueFromUser<double>("Enter h: ");
 
-            var eps = Math.Abs(integralRes1 - integralRes2);
-            Console.WriteLine($"\nEps1 = {eps}");
-            
-            eps = Math.Abs(integralRes2 - integralRes3);
-            Console.WriteLine($"\nEps2 = {eps}");
-        }
-
-        private static double ComputeIntegral(int n) {
-            var upperLimits = new List<double> { 2.0, 4.0, 5.0 };
-            var lowerLimits = new List<double> { 1.0, 2.0, 1.0 };
-            var dists = new List<double>();
-
-            var ratio = 1.0;
-            for (var i = 0; i < upperLimits.Count; i++) {
-                var tmp = upperLimits[i] - lowerLimits[i];
-                dists.Add(tmp);
-                ratio *= tmp;
-            }
-            ratio /= n;
-
-            var rnd = new Random();
-
-            var sum = 0.0;
-            for (var i = 0; i < n; i++) {
-                var rndNum = rnd.NextDouble();
-                var xi = lowerLimits[0] + (dists[0]) * rndNum;
-                var yi = lowerLimits[1] + (dists[1]) * rndNum;
-                var zi = lowerLimits[2] + (dists[2]) * rndNum;
-                sum += Fx(xi, yi, zi);
+            if (a > b) {
+                Utils.Swap(ref a, ref b);
             }
 
-            return ratio * sum;
+            var differenceModules = new List<double>();
+
+            Console.WriteLine("\nExplicit schema");
+            Console.WriteLine("Coords: ");
+
+            var xi = a;
+            var yi = y0;
+            while (xi <= b) {
+                differenceModules.Add(Math.Abs(Ux(xi) - yi));
+                yi += h * Fxu(xi, yi);
+                xi += h;
+                Console.WriteLine($"{xi},{yi}");
+            }
+
+            Console.WriteLine("\nDifference modules: ");
+
+            foreach (var module in differenceModules) {
+                Console.WriteLine(module);
+            }
+
+            Console.WriteLine("\n\nImplicit schema");
+            Console.WriteLine("Coords: ");
+
+            differenceModules.Clear();
+            
+            xi = a;
+            yi = y0;
+            while (xi <= b) {
+                differenceModules.Add(Math.Abs(Ux(xi) - yi));
+
+                var fi = yi + h * Fxu(xi, yi) / 2;
+                var yiApprox = yi + h * Fxu(xi, yi);
+                yi += h * (Fxu(xi, yi) + Fxu(xi + h, yiApprox)) / 2;
+                xi += h;
+                Console.WriteLine($"{xi},{yi}");
+            }
+
+            Console.WriteLine("\nDifference modules: ");
+
+            foreach (var module in differenceModules) {
+                Console.WriteLine(module);
+            }
         }
 
-        private static double Fx(double x, double y, double z) {
-            // return x * Math.Pow(y, 2);
-            return x * Math.Exp(y);
+        private static double Fxu(double x, double u) {
+            return 2 * u + 4 * x;
+        }
+
+        private static double Ux(double x) {
+            return -2 * x + 2 * Math.Exp(2 * x) - 1;
         }
     }
 }
